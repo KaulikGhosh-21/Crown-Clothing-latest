@@ -1,6 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { createUserDataWithEmailAndPassword, createUserDocumentFromAuth } from "../../utils/firebase/firebase.utils";
+import { 
+    createUserDataWithEmailAndPassword, 
+    createUserDocumentFromAuth 
+} from "../../utils/firebase/firebase.utils";
+
 import Button from "../button/button.component";
 
 import FormInput from "../form-input/form-input.component";
@@ -16,9 +20,21 @@ const defaultFieldValues = {
 
 const SignUpForm = () => {
 
+    // useEffect(() => {
+    //     console.log("Use Effect called");
+
+    //     return console.log("Component unmounted");
+    // }, [])
+
+    // console.log("hit")
+
     const [fieldValues, setFieldValues] = useState(defaultFieldValues);
 
     const {displayName, email, password, confirmPassword} = fieldValues;
+
+    const resetFormFields = () => {
+        setFieldValues(defaultFieldValues);
+    }
 
     // console.log(fieldValues)
 
@@ -42,8 +58,16 @@ const SignUpForm = () => {
             const objCreated = {...user, displayName};
             // console.log(objCreated)
             await createUserDocumentFromAuth(objCreated);
+
+            resetFormFields();
+
+            alert("You have succesfully signed up, you can sign in now");
         }catch(err){
-            console.log("User creation encountered error", err);
+            if(err.code === 'auth/email-already-in-use'){
+                alert("This email Id has been taken, try again!");
+            }else{
+                console.log("User creation encountered error", err);
+            }
         }
 
     }

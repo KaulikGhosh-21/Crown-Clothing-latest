@@ -15,7 +15,11 @@ import {
     getFirestore,
     doc,
     getDoc,
-    setDoc
+    setDoc,
+    collection,
+    writeBatch,
+    getDocs,
+    query
 } from "firebase/firestore";
 
 // Your web app's Firebase configuration
@@ -51,15 +55,75 @@ export const signInWithGoogleRedirect = () => signInWithRedirect(auth, provider)
 // creating firestore database instance
 export const db = getFirestore();
 
+
+
+export const addCollectionAndDocuments = async (collectionKey, objects) => {
+    const collectionRef = collection(db, collectionKey);
+
+    const batch = writeBatch(db);
+
+    objects.forEach(object => {
+        const docRef = doc(collectionRef, object.title.toLowerCase());
+
+        batch.set(docRef, object);
+    });
+
+    await batch.commit();
+    // console.log('done');
+}
+
+// export const addCollectionAndDocuments = async (objectsToAdd) => {
+//     objectsToAdd.forEach(async object => {
+//         const docRef = doc(db, 'categories', object.title.toLowerCase());
+//         console.log(docRef)
+
+//         const docSnapshot = await getDoc(docRef);
+//         console.log(docSnapshot)
+
+//         if(!docSnapshot.exists()){
+//             try{
+//                 await setDoc(docRef, object);
+//             }catch(err){
+//                 console.log("Error:", err.message);
+//             }
+//         }
+
+//     })
+// }
+
+export const getCategoriesAndDocuments = async () => {
+    const collectionRef = collection(db, 'categories');
+    // console.log(collectionRef)
+    const q = query(collectionRef);
+    // console.log(q);
+    const querySnapshot = await getDocs(q);
+    // console.log(querySnapshot);
+    // const categoryMap = querySnapshot.docs.reduce((acc, ind) => {
+    //     console.log(acc);
+    //     const {title, items} = ind.data()
+    //     acc[title.toLowerCase()] = items;
+    //     return acc;
+    // }, {});
+    let categoryMap = {};
+    querySnapshot.docs.map(ind => {
+        const {title, items} = ind.data();
+        categoryMap[title.toLowerCase()] = items;
+    })
+    // console.log(categoryMap);
+    return categoryMap
+    // const data = categoryMap.map(ind => ind.data());
+    // console.log(data);
+}
+
 export const createUserDocumentFromAuth = async (userAuth) => {
-    console.log(userAuth)
+    // console.log(userAuth)
     const userDocRef = doc(db, 'users', userAuth.uid);
 
-    console.log(userDocRef);
+    // console.log(userDocRef);
 
     const userDocSnapshot = await getDoc(userDocRef);
 
-    console.log(userDocSnapshot.exists());
+    // console.log(userDocSnapshot.exists());
 
     if(!userDocSnapshot.exists()){
         const {displayName, email} = userAuth;

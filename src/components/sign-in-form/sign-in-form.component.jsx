@@ -1,17 +1,13 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 
 import { 
     signInWithGooglePopup, 
-    createUserDocumentFromAuth,
-    signInUserWithEmailAndPassword,
-    onAuthStateChangedListener
+    signInUserWithEmailAndPassword
 } from "../../utils/firebase/firebase.utils";
 
-import Button from "../button/button.component";
+import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
 
 import FormInput from "../form-input/form-input.component";
-
-import { UserContext } from "../../contexts/user.context";
 
 import "./sign-in-form.styles.scss";
 
@@ -23,8 +19,6 @@ const defaultFieldValues = {
 }
 
 const SignInForm = () => {
-
-    const {setCurrentUser} = useContext(UserContext);
 
     const [fieldValues, setFieldValues] = useState(defaultFieldValues);
 
@@ -46,20 +40,10 @@ const SignInForm = () => {
 
         try{
             const response = await signInUserWithEmailAndPassword(email, password);
-            // console.log(response);
-
-            // setCurrentUser(response.user);
-
-            // onAuthStateChangedListener(() => {
-            //     console.log(user);
-            // })
+            console.log(response.user);
 
             resetFormFields();
 
-            // const {user} = await createUserDataWithEmailAndPassword(email, password);
-            // const objCreated = {...user, displayName};
-            // // console.log(objCreated)
-            // await createUserDocumentFromAuth(objCreated);
         }catch(err){
             switch(err.code){
                 case 'auth/user-not-found':
@@ -77,9 +61,7 @@ const SignInForm = () => {
 
 
     const signInWithGoogle = async () => {
-        const response = await signInWithGooglePopup();
-        console.log(response);
-        // createUserDocumentFromAuth(response.user);
+        await signInWithGooglePopup();
     }
 
 
@@ -114,7 +96,7 @@ const SignInForm = () => {
                     <Button 
                         type="button"
                         onClick={signInWithGoogle} 
-                        buttonType="google">
+                        buttonType={BUTTON_TYPE_CLASSES.google}>
                             Google Sign in
                     </Button>
 

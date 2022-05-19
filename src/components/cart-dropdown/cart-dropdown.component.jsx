@@ -1,13 +1,16 @@
-import "./cart-dropdown.styles.scss";
+import "./cart-dropdown.styles.jsx";
 
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import Button from "../button/button.component";
 import { useContext } from "react";
 import { CartContext } from "../../contexts/cart.context";
 import CartItem from "../cart-item/cart-item.component";
+import { CartDropdownContainer, CartItems, EmptyMessage, HideOverlayContainer } from "./cart-dropdown.styles.jsx";
 
 const CartDropdown = () => {
+
+    const navigate = useNavigate();
 
     const {isCartOpen, setIsCartOpen, cartItems} = useContext(CartContext);
 
@@ -15,23 +18,28 @@ const CartDropdown = () => {
         setIsCartOpen(!isCartOpen);
     }
 
-    console.log(cartItems)
-
     return(
-        <div className={`${isCartOpen ? 'show-overlay' : ''} hide-overlay`}
+        <HideOverlayContainer showOverlay={isCartOpen}
             onClick={toggleCart}
         >
-            <div className={`${isCartOpen ? 'show-dropdown' : ''} cart-dropdown-container`}>
-                <div className="cart-items">
+            <CartDropdownContainer showDropdown={isCartOpen}>
+                <CartItems>
                     {
-                        cartItems.map(cartItem => <CartItem key={cartItem.id} cartItem={cartItem} />)
+                        cartItems.length ? 
+                        (cartItems.map(cartItem => 
+                            <CartItem key={cartItem.id} cartItem={cartItem} />)
+                        ) : 
+                        (
+                            <EmptyMessage>
+                                No products in your cart
+                            </EmptyMessage>
+                        )
                     }
-                </div>
-                <Link to="/checkout" className="checkout-link">
-                    <Button>Go to checkout</Button>
-                </Link>
-            </div>
-        </div>
+                </CartItems>
+
+                <Button onClick={() => navigate('/checkout')}>Go to checkout</Button>
+            </CartDropdownContainer>
+        </HideOverlayContainer>
     )
 };
 

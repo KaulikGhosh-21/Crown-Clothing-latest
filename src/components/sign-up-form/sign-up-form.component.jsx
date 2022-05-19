@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { 
     createUserDataWithEmailAndPassword, 
@@ -20,14 +20,6 @@ const defaultFieldValues = {
 
 const SignUpForm = () => {
 
-    // useEffect(() => {
-    //     console.log("Use Effect called");
-
-    //     return console.log("Component unmounted");
-    // }, [])
-
-    // console.log("hit")
-
     const [fieldValues, setFieldValues] = useState(defaultFieldValues);
 
     const {displayName, email, password, confirmPassword} = fieldValues;
@@ -36,11 +28,8 @@ const SignUpForm = () => {
         setFieldValues(defaultFieldValues);
     }
 
-    // console.log(fieldValues)
-
     const handleChange = (event) => {
         const {name, value} = event.target;
-        // console.log(name, value)
 
         setFieldValues({...fieldValues, [name]: value});
     }
@@ -55,8 +44,9 @@ const SignUpForm = () => {
 
         try{
             const {user} = await createUserDataWithEmailAndPassword(email, password);
+
             const objCreated = {...user, displayName};
-            // console.log(objCreated)
+
             await createUserDocumentFromAuth(objCreated);
 
             resetFormFields();

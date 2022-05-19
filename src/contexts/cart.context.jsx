@@ -4,7 +4,6 @@ const addCartItem = (cartItems, productToAdd) => {
     const existingItem = cartItems.find(cartItem => cartItem.id === productToAdd.id);
 
     if(existingItem){
-        console.log("If block")
         return cartItems.map(cartItem => cartItem.id === productToAdd.id ? 
             {...cartItem, quantity: cartItem.quantity + 1} : 
             cartItem)
@@ -15,7 +14,6 @@ const addCartItem = (cartItems, productToAdd) => {
 
 const decrementCartItem = (cartItems, productToDecrement) => {
     if(productToDecrement.quantity === 1){
-        console.log("If block")
         return cartItems.filter(cartItem => cartItem.id !== productToDecrement.id)
     }else{
         return cartItems.map(cartItem => cartItem.id === productToDecrement.id ? 
@@ -38,25 +36,19 @@ export const CartProvider = ({children}) => {
     const [cartItems, setCartItems] = useState([]);
 
     const addItemToCart = (productToAdd) => {
-        console.log(productToAdd);
         const updatedCartItems = addCartItem(cartItems, productToAdd);
-        console.log(updatedCartItems)
         setCartItems(updatedCartItems);
     }
 
     const decrementItemFromCart = (productToDecrement) => {
-        console.log(productToDecrement);
         const updatedCartItemsFromDecrement = 
             decrementCartItem(cartItems, productToDecrement);
-        console.log(updatedCartItemsFromDecrement);
         setCartItems(updatedCartItemsFromDecrement)
     }
 
     const removeItemFromCart = (productToRemove) => {
-        console.log(productToRemove);
         const updatedCartItemsAfterRemove = cartItems.filter(cartItem => 
             cartItem.id !== productToRemove.id);
-        console.log(updatedCartItemsAfterRemove);
         setCartItems(updatedCartItemsAfterRemove);
     }
 

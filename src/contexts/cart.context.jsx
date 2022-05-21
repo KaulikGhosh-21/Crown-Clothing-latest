@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useReducer, useState } from "react";
 
 const addCartItem = (cartItems, productToAdd) => {
     const existingItem = cartItems.find(cartItem => cartItem.id === productToAdd.id);
@@ -31,9 +31,60 @@ export const CartContext = createContext({
     removeItemFromCart: () => {}
 });
 
+
+const CART_ACTION_TYPES = {
+    SET_CART_ITEMS: 'SET_CART_ITEMS',
+    SET_IS_CART_OPEN: 'SET_IS_CART_OPEN'
+}
+
+
+const cartReducer = (state, action) => {
+    console.log(action);
+    switch(action.type){
+        case CART_ACTION_TYPES.SET_CART_ITEMS:
+            return{
+                ...state,
+                cartItems: action.payload
+            }
+        case CART_ACTION_TYPES.SET_IS_CART_OPEN:
+            return{
+                ...state,
+                isCartOpen: action.payload
+            }
+        default:
+            throw new Error(`Unhandled type ${action.type} error`);
+    }
+}
+
+
+const INITIAL_STATE = {
+    cartItems: [],
+    isCartOpen: false
+}
+
+
 export const CartProvider = ({children}) => {
 
-    const [cartItems, setCartItems] = useState([]);
+    // const [cartItems, setCartItems] = useState([]);
+
+    const [state, dispatch] = useReducer(cartReducer, INITIAL_STATE);
+    console.log(state);
+
+    const {cartItems, isCartOpen} = state;
+
+
+    const setCartItems = (newCartItems) => dispatch({ 
+        type: CART_ACTION_TYPES.SET_CART_ITEMS,
+        payload: newCartItems
+    })
+
+    const setIsCartOpen = (newIsCartOpenStatus) => dispatch({
+        type: CART_ACTION_TYPES.SET_IS_CART_OPEN,
+        payload: newIsCartOpenStatus
+    })
+
+
+
 
     const addItemToCart = (productToAdd) => {
         const updatedCartItems = addCartItem(cartItems, productToAdd);
@@ -52,7 +103,7 @@ export const CartProvider = ({children}) => {
         setCartItems(updatedCartItemsAfterRemove);
     }
 
-    const [isCartOpen, setIsCartOpen] = useState(false);
+    // const [isCartOpen, setIsCartOpen] = useState(false);
 
     const value = {
         isCartOpen, 

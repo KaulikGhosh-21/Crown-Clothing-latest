@@ -104,13 +104,17 @@ export const getCategoriesAndDocuments = async () => {
     //     acc[title.toLowerCase()] = items;
     //     return acc;
     // }, {});
-    let categoryMap = {};
-    querySnapshot.docs.map(ind => {
-        const {title, items} = ind.data();
-        categoryMap[title.toLowerCase()] = items;
-    })
+    // let categoryMap = {};
+    // console.log(querySnapshot.docs.map(ind => ind.data()));
+
+    return querySnapshot.docs.map(indData => indData.data());
+
+    // querySnapshot.docs.map(ind => {
+    //     const {title, items} = ind.data();
+    //     categoryMap[title.toLowerCase()] = items;
+    // })
     // console.log(categoryMap);
-    return categoryMap
+    // return categoryMap
     // const data = categoryMap.map(ind => ind.data());
     // console.log(data);
 }

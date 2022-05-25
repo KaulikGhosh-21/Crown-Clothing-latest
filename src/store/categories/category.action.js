@@ -1,0 +1,1 @@
+export const setCategoriesArray = (type, payload) => ({type, payload})

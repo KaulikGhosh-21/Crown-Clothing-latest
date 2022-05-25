@@ -1,14 +1,19 @@
-import { useContext, Fragment } from "react";
-import { CategoriesContext } from "../../contexts/category.context";
+import { Fragment } from "react";
+// import { CategoriesContext } from "../../contexts/category.context";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import ProductCard from "../../components/product-card/product-card.component"
 
 import "./categories-preview.styles.scss";
-import { Link } from "react-router-dom";
+
+import { selectCategoryMap } from "../../store/categories/category.selector";
 
 const CategoriesPreview = () => {
 
-    const {categoryMap} = useContext(CategoriesContext)
+    // const {categoryMap} = useContext(CategoriesContext)
+
+    const categoryMap = useSelector(selectCategoryMap);
 
     return(
         <div className="products-upper-container">

@@ -1,4 +1,4 @@
-import { createContext, useReducer, useState } from "react";
+import { createContext, useReducer } from "react";
 
 const addCartItem = (cartItems, productToAdd) => {
     const existingItem = cartItems.find(cartItem => cartItem.id === productToAdd.id);
@@ -68,7 +68,7 @@ export const CartProvider = ({children}) => {
     // const [cartItems, setCartItems] = useState([]);
 
     const [state, dispatch] = useReducer(cartReducer, INITIAL_STATE);
-    console.log(state);
+    // console.log(state);
 
     const {cartItems, isCartOpen} = state;
 

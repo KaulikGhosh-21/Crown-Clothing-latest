@@ -1,13 +1,37 @@
-import { useContext } from "react";
-import { CartContext } from "../../contexts/cart.context";
+
+import { useDispatch, useSelector } from "react-redux";
+
+import { 
+    addItemToCart, 
+    decrementItemFromCart, 
+    removeItemFromCart 
+} from "../../store/cart/cart.action";
+
+import { selectCartItems } from "../../store/cart/cart.selector";
 
 import "./checkout-item.styles.scss";
 
 const CheckoutItem = ({checkoutItem}) => {
+    console.log("checkout-item");
 
-    const {addItemToCart, decrementItemFromCart, removeItemFromCart} = useContext(CartContext);
+    const dispatch = useDispatch();
+
+    const cartItems = useSelector(selectCartItems)
 
     const {name, quantity, price, imageUrl} = checkoutItem;
+
+    const updateCartItemsInCheckout = (operation) => {
+        switch(operation){
+            case 'addToCart':
+                dispatch(addItemToCart(cartItems, checkoutItem));
+                return;
+            case 'decrementFromCart':
+                dispatch(decrementItemFromCart(cartItems, checkoutItem));
+                return;
+            default:
+                dispatch(removeItemFromCart(cartItems, checkoutItem));
+        }
+    }
 
     return(
         <div className="checkout-item-container">
@@ -18,14 +42,14 @@ const CheckoutItem = ({checkoutItem}) => {
             <span className="quantity">
                 <div 
                     className="arrow"
-                    onClick={() => decrementItemFromCart(checkoutItem)}
+                    onClick={() => updateCartItemsInCheckout('decrementFromCart')}
                 >
                     &#10094;
                 </div>
                 <div className="value">{quantity}</div>
                 <div 
                     className="arrow"
-                    onClick={() => addItemToCart(checkoutItem)}
+                    onClick={() => updateCartItemsInCheckout('addToCart')}
                 >
                     &#10095;
                 </div>
@@ -33,7 +57,7 @@ const CheckoutItem = ({checkoutItem}) => {
             <span className="price">{price}</span>
             <div 
                 className="remove-button" 
-                onClick={() => removeItemFromCart(checkoutItem)}>&#10005;</div>
+                onClick={updateCartItemsInCheckout}>&#10005;</div>
         </div>
     )
 };

@@ -13,7 +13,6 @@ import { createSelector } from "reselect";
 // }
 
 const selectCategoriesReducerSlice = (state) => {
-    // console.log("selector 1");
     return state.categories;
 }
 
@@ -21,7 +20,6 @@ const selectCategoriesReducerSlice = (state) => {
 export const selectCategoriesData = createSelector(
     [selectCategoriesReducerSlice],
     (categoriesSlice) => {
-        // console.log("selector 2", categoriesSlice);
         return categoriesSlice.categories
     }
 );
@@ -29,7 +27,6 @@ export const selectCategoriesData = createSelector(
 export const selectCategoryMap = createSelector(
     [selectCategoriesData],
     (categories) => {
-        // console.log("selector 3", categories);
         let categoryMap = {};
         categories.map(category => {
             const {title, items} = category;
@@ -38,3 +35,8 @@ export const selectCategoryMap = createSelector(
         return categoryMap
     }
 );
+
+export const selectCategoriesIsLoading = createSelector(
+    [selectCategoriesReducerSlice],
+    (categoriesSlice) => categoriesSlice.isLoading
+)

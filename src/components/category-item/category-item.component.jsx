@@ -12,7 +12,6 @@ import {
 const CategoryItem = ({category}) => {
     
   const navigate = useNavigate();
-  console.log(category.route);
 
   return (
     <CategoryItemContainer onClick={() => navigate(category.route)}>

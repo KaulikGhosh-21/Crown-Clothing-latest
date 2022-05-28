@@ -1,4 +1,4 @@
-import { CART_ACTION_TYPES } from "./cartion.types"
+import { CART_ACTION_TYPES } from "./cart.types"
 
 
 
@@ -25,7 +25,6 @@ const decrementCartItem = (cartItems, productToDecrement) => {
 }
 
 export const setCartItems = (newCartItems) => {
-    console.log("set cart items called");
     return { 
         type: CART_ACTION_TYPES.SET_CART_ITEMS,
         payload: newCartItems

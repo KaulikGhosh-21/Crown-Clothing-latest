@@ -5,17 +5,14 @@ import './index.scss';
 
 import App from './App';
 
+import { stripeInstance } from './utils/stripe/stripe.utils';
+
 
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { persistor, store } from './store/store';
 import { PersistGate } from 'redux-persist/integration/react';
-
-
-// import { UserProvider } from './contexts/user.context';
-// import { CategoriesProvider } from './contexts/category.context';
-// import { CartProvider } from './contexts/cart.context';
-
+import { Elements } from '@stripe/react-stripe-js';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -24,13 +21,9 @@ root.render(
     <Provider store={store}>
       <PersistGate persistor={persistor}>
         <BrowserRouter>
-          {/* <UserProvider> */}
-            {/* <CategoriesProvider> */}
-              {/* <CartProvider> */}
-                <App />
-              {/* </CartProvider> */}
-            {/* </CategoriesProvider> */}
-          {/* </UserProvider> */}
+          <Elements stripe={stripeInstance}>
+            <App />
+          </Elements>
         </BrowserRouter>
       </PersistGate>
     </Provider>

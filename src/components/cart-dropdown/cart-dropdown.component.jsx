@@ -3,9 +3,13 @@ import "./cart-dropdown.styles.jsx";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { selectIsCartOpen, selectCartItems, selectNewCartCount } from "../../store/cart/cart.selector.js";
+import { 
+    selectIsCartOpen, 
+    selectCartItems, 
+    selectNewCartCount 
+} from "../../store/cart/cart.selector.js";
+
 import { setIsCartOpen } from "../../store/cart/cart.action.js";
-import { CART_ACTION_TYPES } from "../../store/cart/cartion.types.js";
 
 import Button from "../button/button.component";
 // import { useContext } from "react";
@@ -21,7 +25,7 @@ import {
 const CartDropdown = () => {
 
     const navigate = useNavigate();
-    console.log("cart-dropdown");
+    // console.log("cart-dropdown");
 
     const dispatch = useDispatch();
 

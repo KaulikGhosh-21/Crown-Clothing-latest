@@ -12,7 +12,6 @@ import { selectCartItems } from "../../store/cart/cart.selector";
 import "./checkout-item.styles.scss";
 
 const CheckoutItem = ({checkoutItem}) => {
-    console.log("checkout-item");
 
     const dispatch = useDispatch();
 

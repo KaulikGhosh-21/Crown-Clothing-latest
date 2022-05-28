@@ -1,12 +1,13 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 
 import {ReactComponent as CrwnLogo} from "../../assets/crown.svg";
 import CartDropdown from "../../components/cart-dropdown/cart-dropdown.component";
 import CartIcon from "../../components/cart-icon/cart-icon.component";
+import { signOutStart } from "../../store/user/user.action";
 
 import { selectCurrentUser } from "../../store/user/user.selector";
-import { signOutUser } from "../../utils/firebase/firebase.utils";
+// import { signOutUser } from "../../utils/firebase/firebase.utils";
 
 import "./navigation.styles.jsx";
 import { 
@@ -18,10 +19,14 @@ import {
 
 const Navigation = () => {
 
+    const dispatch = useDispatch();
+
     const currentUser = useSelector(selectCurrentUser);
 
-    const signOutHandler = async () => {
-        await signOutUser();
+    // console.log(currentUser);
+
+    const signOutHandler = () => {
+       dispatch(signOutStart());
     }
 
     return(

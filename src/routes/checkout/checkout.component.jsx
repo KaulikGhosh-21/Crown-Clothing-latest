@@ -4,10 +4,10 @@ import "./checkout.styles.scss";
 import CheckoutItem from "../../components/checkout-item/checkout-item.component";
 import { useSelector } from "react-redux";
 import { selectCartItems } from "../../store/cart/cart.selector";
+import PaymentForm from "../../components/payment-form/payment-form.component";
 // import { CartContext } from "../../contexts/cart.context";
 
 const Checkout = () => {
-    console.log("checkout");
 
     // const {cartItems} = useContext(CartContext);
 
@@ -43,6 +43,10 @@ const Checkout = () => {
             }
 
             <span className="total">{`Total: $${cartTotal}`}</span>
+
+
+            <PaymentForm cartTotal={cartTotal}/>
+
         </div>
     )
 };

@@ -3,14 +3,13 @@ import "./cart-icon.styles.jsx";
 
 import { selectCartItems, selectIsCartOpen } from "../../store/cart/cart.selector.js";
 import { setIsCartOpen } from "../../store/cart/cart.action.js";
-import { CART_ACTION_TYPES } from "../../store/cart/cartion.types.js";
 
 // import { useContext } from "react";
 // import { CartContext } from "../../contexts/cart.context";
 import { CartIconContainer, ItemCount, ShoppingIcon } from "./cart-icon.styles.jsx";
 
 const CartIcon = () => {
-    console.log("Cart-icon");
+    // console.log("Cart-icon");
 
     const dispatch = useDispatch();
 

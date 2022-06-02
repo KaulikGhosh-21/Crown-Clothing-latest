@@ -8,6 +8,7 @@ export const NavigationContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 25px;
+  position: relative;
 `;
 
 export const LogoContainer = styled(Link)`

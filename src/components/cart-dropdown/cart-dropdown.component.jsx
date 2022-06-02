@@ -5,15 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { 
     selectIsCartOpen, 
-    selectCartItems, 
-    selectNewCartCount 
-} from "../../store/cart/cart.selector.js";
+    selectCartItems 
+} from "../../store/cart-new/cart-new.selector.js";
 
-import { setIsCartOpen } from "../../store/cart/cart.action.js";
+import { setIsCartOpen } from "../../store/cart-new/cart-new.action.js";
 
 import Button from "../button/button.component";
-// import { useContext } from "react";
-// import { CartContext } from "../../contexts/cart.context";
 import CartItem from "../cart-item/cart-item.component";
 import { 
     CartDropdownContainer, 
@@ -21,19 +18,18 @@ import {
     EmptyMessage, 
     HideOverlayContainer 
 } from "./cart-dropdown.styles.jsx";
+import { selectItemsInCart } from "../../store/user/user.selector.js";
 
 const CartDropdown = () => {
 
+    const itemsInCart = useSelector(selectItemsInCart);
+
     const navigate = useNavigate();
-    // console.log("cart-dropdown");
 
     const dispatch = useDispatch();
 
-    // const {isCartOpen, setIsCartOpen, cartItems} = useContext(CartContext);
 
     const isCartOpen = useSelector(selectIsCartOpen);
-    const cartItems = useSelector(selectCartItems);
-    const newCartCount = useSelector(selectNewCartCount);
 
     const toggleCart = () => {
         dispatch(
@@ -48,8 +44,8 @@ const CartDropdown = () => {
             <CartDropdownContainer showDropdown={isCartOpen}>
                 <CartItems>
                     {
-                        cartItems.length ? 
-                        (cartItems.map(cartItem => 
+                        itemsInCart ? 
+                        (itemsInCart.map(cartItem => 
                             <CartItem key={cartItem.id} cartItem={cartItem} />)
                         ) : 
                         (

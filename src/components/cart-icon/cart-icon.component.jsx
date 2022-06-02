@@ -1,28 +1,31 @@
 import { useDispatch, useSelector } from "react-redux";
 import "./cart-icon.styles.jsx";
 
-import { selectCartItems, selectIsCartOpen } from "../../store/cart/cart.selector.js";
-import { setIsCartOpen } from "../../store/cart/cart.action.js";
+import { selectCartItems, selectIsCartOpen } from "../../store/cart-new/cart-new.selector.js";
+import { setIsCartOpen } from "../../store/cart-new/cart-new.action.js";
 
-// import { useContext } from "react";
-// import { CartContext } from "../../contexts/cart.context";
+
 import { CartIconContainer, ItemCount, ShoppingIcon } from "./cart-icon.styles.jsx";
+import { selectItemsInCart } from "../../store/user/user.selector.js";
 
 const CartIcon = () => {
-    // console.log("Cart-icon");
 
     const dispatch = useDispatch();
 
-    // const {isCartOpen, setIsCartOpen, cartItems} = useContext(CartContext)
-
     const isCartOpen = useSelector(selectIsCartOpen)
-    const cartItems = useSelector(selectCartItems)
+
+    const itemsInCart = useSelector(selectItemsInCart)
+
+    console.log(itemsInCart);
 
     const toggleCart = () => {
         dispatch(setIsCartOpen(!isCartOpen));
     }
 
-    const totalCartItems = cartItems.reduce((acc, cartItem) => acc + cartItem.quantity, 0)
+    let totalCartItems = itemsInCart.reduce(
+        (acc, cartItem) => acc + cartItem.quantity, 0)
+        console.log(totalCartItems);
+
 
     return(
         <CartIconContainer cartIsOpen={isCartOpen}

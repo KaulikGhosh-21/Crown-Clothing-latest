@@ -1,5 +1,4 @@
-import { CART_ACTION_TYPES } from "./cart.types"
-
+import {CART_NEW_ACTION_TYPES} from "./cart-new.types"
 
 
 const addCartItem = (cartItems, productToAdd) => {
@@ -26,13 +25,13 @@ const decrementCartItem = (cartItems, productToDecrement) => {
 
 export const setCartItems = (newCartItems) => {
     return { 
-        type: CART_ACTION_TYPES.SET_CART_ITEMS,
+        type: CART_NEW_ACTION_TYPES.SET_CART_ITEMS,
         payload: newCartItems
     }
 }
 
 export const setIsCartOpen = (newIsCartOpenStatus) => ({
-    type: CART_ACTION_TYPES.SET_IS_CART_OPEN,
+    type: CART_NEW_ACTION_TYPES.SET_IS_CART_OPEN,
     payload: newIsCartOpenStatus
 })
 

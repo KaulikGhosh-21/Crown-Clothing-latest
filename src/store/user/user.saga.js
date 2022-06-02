@@ -1,5 +1,12 @@
 import { takeLatest, call, all, put } from "redux-saga/effects";
 
+import { 
+    addItemsToCart, 
+    decrementItemsQuantity, 
+    removeItemFromCart
+ } from "../../utils/user-cart/user-cart";
+
+ import { decrementItemQuantityFromCartSuccess, decrementItemQuantityFromCartFailed } from "./user.action.js"
 
 import { 
     createUserDataWithEmailAndPassword,
@@ -7,22 +14,36 @@ import {
     getCurrentUser, 
     signInUserWithEmailAndPassword, 
     signInWithGooglePopup,
-    signOutUser
+    signOutUser,
+    updateUserDoc
 } from "../../utils/firebase/firebase.utils";
 
-import { signInFailed, signInSuccess, signOutFailed, signOutSuccess, signUpFailed, signUpSuccess } from "./user.action";
+import { 
+    removeItemFromCartSuccess,
+    removeItemFromCartFailed,
+    addItemsToCartFailed, 
+    addItemsToCartSuccess, 
+    signInFailed, 
+    signInSuccess, 
+    signOutFailed, 
+    signOutSuccess, 
+    signUpFailed, 
+    signUpSuccess 
+} from "./user.action";
 
 import { USER_ACTION_TYPES } from "./user.types";
+import { useSelector } from "react-redux";
+import { selectItemsInCart } from "./user.selector";
 
 
 // To check user session
 
 export function* getSnapshotfromUserAuth(userAuth){
     try{
-        // console.log(userAuth)
+        console.log(userAuth)
         const userSnapshot = yield call(createUserDocumentFromAuth, userAuth);
-        // console.log(userSnapshot);
-        // console.log(userSnapshot.data());
+        console.log(userSnapshot);
+        console.log(userSnapshot.data());
         yield put(signInSuccess({ id: userSnapshot.id, ...userSnapshot.data()}))
     }catch(error){
         yield put(signInFailed());
@@ -32,6 +53,7 @@ export function* getSnapshotfromUserAuth(userAuth){
 export function* isUserAuthenticated(){
     try{
         const userAuth = yield call(getCurrentUser);
+        console.log(userAuth);
         if(!userAuth) return;
 
         yield call(getSnapshotfromUserAuth, userAuth);
@@ -70,6 +92,7 @@ export function* onGoogleSignInStart(){
 export function* emailSignIn({ payload : { email, password } }){
     try{
         const { user } = yield call(signInUserWithEmailAndPassword, email, password);
+        console.log(user);
         yield call(getSnapshotfromUserAuth, user);
     }catch(err){
         yield put(signInFailed(err));
@@ -116,12 +139,71 @@ export function* onSignOutStart(){
 }
 
 
+// To handle adding items to cart
+
+export function* addItemsToCartOfUser({ 
+        payload: { currentUser, cartItemsOfUser, product } 
+    }){
+        console.log("Add to items was called")
+    try{
+        console.log(cartItemsOfUser, product);
+        const userUpdatedCartItems = addItemsToCart(cartItemsOfUser, product);
+        yield call(updateUserDoc, currentUser, {itemsInCart: userUpdatedCartItems})
+        yield put(addItemsToCartSuccess(userUpdatedCartItems));
+    } catch(err) {
+        yield put(addItemsToCartFailed(err));
+    }
+}
+
+export function* onAddItemsToCartStart(){
+    yield takeLatest(USER_ACTION_TYPES.ADD_ITEMS_TO_CART_START, addItemsToCartOfUser)
+}
+
+export function* decrementItemQuantity({
+        payload: { currentUser, cartItemsOfUser, product } 
+    }){
+        try{
+            const userUpdatedCartItems = decrementItemsQuantity(cartItemsOfUser, product);
+            yield call(updateUserDoc, currentUser, {itemsInCart: userUpdatedCartItems})
+            yield put(decrementItemQuantityFromCartSuccess(userUpdatedCartItems));
+        } catch(err){
+            yield put(decrementItemQuantityFromCartFailed(err))
+        }
+    }
+
+export function* onDecrementItemQuantityFromCartStart(){
+    yield takeLatest(USER_ACTION_TYPES.DECREMENT_ITEM_QUANTITY_FROM_CART_START, 
+        decrementItemQuantity)
+}
+
+export function* removeItemFromCartFunc({
+    payload: { currentUser, cartItemsOfUser, product } 
+}){
+    console.log("Hello");
+    try{
+        const userUpdatedCartItems = removeItemFromCart(cartItemsOfUser, product);
+        yield call(updateUserDoc, currentUser, {itemsInCart: userUpdatedCartItems})
+        yield put(removeItemFromCartSuccess(userUpdatedCartItems));
+    } catch(err){
+        yield put(removeItemFromCartFailed(err))
+    }
+}
+
+export function* onRemoveItemFromCartStart(){
+yield takeLatest(USER_ACTION_TYPES.REMOVE_ITEM_FROM_CART_START, 
+    removeItemFromCartFunc)
+}
+
+
 export function* userSaga(){
     yield all([
         call(onCheckUserSession), 
         call(onGoogleSignInStart), 
         call(onEmailSignInStart),
         call(onSignUpStart),
-        call(onSignOutStart)
+        call(onSignOutStart),
+        call(onAddItemsToCartStart),
+        call(onDecrementItemQuantityFromCartStart),
+        call(onRemoveItemFromCartStart)
     ])
 }

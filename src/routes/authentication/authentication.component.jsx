@@ -1,3 +1,5 @@
+import { useSelector } from "react-redux";
+import { selectIsSignupDone } from "../../store/user/user.selector";
 
 // import { getRedirectResult } from "firebase/auth";
 // import { useEffect } from "react";
@@ -12,9 +14,29 @@ import SignUpForm from "../../components/sign-up-form/sign-up-form.component";
 
 
 import "./authentication.styles.scss";
+import { useState } from "react";
+import Button from "../../components/button/button.component";
 
 
 const Authentication = () => {
+
+    const isSignupDone = useSelector(selectIsSignupDone);
+
+    console.log(isSignupDone);
+
+    let [whichFormUserWants, setWhichFormUserWants] = useState("");
+
+
+    let className = "";
+
+    if(whichFormUserWants === "signup" && !isSignupDone){
+        className = "signup-wanted-signup-not-done";
+    }else if(whichFormUserWants === "signin" && !isSignupDone){
+        className = "signin-wanted-signup-not-done";
+    }
+
+    console.log(className);
+
 
     // For Sign in with Redirect
 
@@ -40,18 +62,49 @@ const Authentication = () => {
     // }
 
     return(
-        <div className="authentication-container">
-            {/* <h1>Hey, This is the Sign-in Page</h1>
-            <button onClick={getUser}>
-                Sign In With Google
-            </button> */}
-            {/* <button onClick={getUserFromRedirect}>
-                Sign In With Google Redirect
-            </button> */}
+        <div className="auth-container">
+            <div className={`${isSignupDone && 'signup-done'} authentication-container`}>
 
-            <SignInForm />
 
-            <SignUpForm />
+                {
+                    className === "signup-wanted-signup-not-done" && !isSignupDone ? (
+                    <SignUpForm 
+                        className={className}
+                    />
+                    ) : (
+                        <SignInForm 
+                            className={className}
+                        />
+                    )
+                }
+
+            </div>
+            {
+                !isSignupDone && (
+                    <div className="auth-buttons">
+                        {
+                            whichFormUserWants === "signup" && !isSignupDone ? (
+                                <>
+                                <h3>Already got an account.</h3>
+                                <span 
+                                    onClick={() => setWhichFormUserWants("signin")}>
+                                        Signin
+                                </span> 
+                            </>
+                            ) : (
+                                <>
+                                    <h3>Don't have an account ?</h3>
+                                    <span
+                                        onClick={() => setWhichFormUserWants("signup")}>
+                                            Signup
+                                    </span>
+                                </>
+                            )
+                        }
+                    </div>
+                ) 
+            }
+            
         </div>
     )
 };

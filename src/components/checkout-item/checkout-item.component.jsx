@@ -1,34 +1,62 @@
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { 
-    addItemToCart, 
-    decrementItemFromCart, 
-    removeItemFromCart 
-} from "../../store/cart/cart.action";
+// import { 
+//     addItemToCart, 
+//     decrementItemFromCart, 
+//     removeItemFromCart 
+// } from "../../store/cart-new/cart-new.action";
 
-import { selectCartItems } from "../../store/cart/cart.selector";
+import { 
+    addItemsToCartStart, 
+    decrementItemQuantityFromCartStart, 
+    removeItemFromCartStart ,
+    itemSuccessfullyAdded
+} from "../../store/user/user.action";
+
+import { selectCartItems } from "../../store/cart-new/cart-new.selector";
+import { selectCurrentUser, selectItemAddedToCart, selectItemsInCart } from "../../store/user/user.selector";
 
 import "./checkout-item.styles.scss";
+import { SuccessPrompt } from "../success-prompt/success-prompt.component";
 
 const CheckoutItem = ({checkoutItem}) => {
 
+    const currentUser = useSelector(selectCurrentUser); 
+
     const dispatch = useDispatch();
 
-    const cartItems = useSelector(selectCartItems)
+    const cartItemsOfUser = useSelector(selectItemsInCart)
 
     const {name, quantity, price, imageUrl} = checkoutItem;
+
+    const isItemRemovedSuccessfully = useSelector(selectItemAddedToCart);
+
+    if(isItemRemovedSuccessfully){
+        const timeoutRet = setTimeout(() => {
+            dispatch(itemSuccessfullyAdded());
+            clearTimeout(timeoutRet);
+        }, 1000)
+    }
 
     const updateCartItemsInCheckout = (operation) => {
         switch(operation){
             case 'addToCart':
-                dispatch(addItemToCart(cartItems, checkoutItem));
+                dispatch(addItemsToCartStart(
+                    {currentUser, cartItemsOfUser, product: checkoutItem}
+                ));
                 return;
             case 'decrementFromCart':
-                dispatch(decrementItemFromCart(cartItems, checkoutItem));
+                dispatch(
+                    decrementItemQuantityFromCartStart(
+                        {currentUser, cartItemsOfUser, product: checkoutItem}
+                    )
+                );
                 return;
             default:
-                dispatch(removeItemFromCart(cartItems, checkoutItem));
+                dispatch(removeItemFromCartStart(
+                    {currentUser, cartItemsOfUser, product: checkoutItem}
+                ));
         }
     }
 
@@ -57,6 +85,11 @@ const CheckoutItem = ({checkoutItem}) => {
             <div 
                 className="remove-button" 
                 onClick={updateCartItemsInCheckout}>&#10005;</div>
+
+            {
+                isItemRemovedSuccessfully && 
+                <SuccessPrompt>Item successfully removed from cart</SuccessPrompt>
+            }
         </div>
     )
 };

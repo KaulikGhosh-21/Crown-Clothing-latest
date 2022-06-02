@@ -1,7 +1,11 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-import { googleSignInStart, emailSignInStart } from "../../store/user/user.action";
+import { googleSignInStart, emailSignInStart, authSuccessfullyDone } from "../../store/user/user.action";
+import { selectAuthDone, selectUserIsLoading } from "../../store/user/user.selector";
+
+import {SuccessPrompt} from "../success-prompt/success-prompt.component";
 
 // import { 
 //     signInWithGooglePopup, 
@@ -21,13 +25,24 @@ const defaultFieldValues = {
     password: "",
 }
 
-const SignInForm = () => {
+const SignInForm = ({className}) => {
+
+    const isLoading = useSelector(selectUserIsLoading)
+
+    const isAuthDone = useSelector(selectAuthDone)
 
     const dispatch = useDispatch()
 
     const [fieldValues, setFieldValues] = useState(defaultFieldValues);
 
     const {email, password} = fieldValues;
+
+    // if(isAuthDone){
+    //     const timeoutRet = setTimeout(() => {
+    //         dispatch(authSuccessfullyDone());
+    //         clearTimeout(timeoutRet);
+    //     }, 1000)
+    // }
 
     const resetFormFields = () => {
         setFieldValues(defaultFieldValues);
@@ -73,7 +88,8 @@ const SignInForm = () => {
 
 
     return(
-        <div className="sign-in-container">
+        <div className={`${className} sign-in-container`}
+        >
 
             <h2>Already have an account?</h2>
 
@@ -99,7 +115,7 @@ const SignInForm = () => {
 
                 <div className="buttons-container">
 
-                    <Button type="submit">Sign In</Button>
+                    <Button isLoading={isLoading} type="submit">Sign In</Button>
                     <Button 
                         type="button"
                         onClick={signInWithGoogle} 

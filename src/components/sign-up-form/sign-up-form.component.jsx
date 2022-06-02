@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { signUpStart } from "../../store/user/user.action";
+import { selectUserIsLoading } from "../../store/user/user.selector";
 
 // import { 
 //     createUserDataWithEmailAndPassword, 
@@ -21,7 +22,12 @@ const defaultFieldValues = {
     confirmPassword: ""
 }
 
-const SignUpForm = () => {
+const SignUpForm = ({className}) => {
+
+    // console.log(className)
+    
+
+    const isLoading = useSelector(selectUserIsLoading)
 
     const dispatch = useDispatch();
 
@@ -60,7 +66,6 @@ const SignUpForm = () => {
 
             resetFormFields();
 
-            alert("You have succesfully signed up, you can sign in now");
         }catch(err){
             if(err.code === 'auth/email-already-in-use'){
                 alert("This email Id has been taken, try again!");
@@ -72,7 +77,8 @@ const SignUpForm = () => {
     }
 
     return(
-        <div className="sign-up-container">
+        <div className={`${className} sign-up-container`}
+        >
 
             <h2>Don't have an account?</h2>
 
@@ -112,7 +118,7 @@ const SignUpForm = () => {
                     value={confirmPassword}
                 />
 
-                <Button type="submit">Sign Up</Button>
+                <Button type="submit" isLoading={isLoading}>Sign up</Button>
 
             </form>
 

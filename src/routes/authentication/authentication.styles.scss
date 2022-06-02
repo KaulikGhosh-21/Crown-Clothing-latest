@@ -1,6 +1,28 @@
-.authentication-container{
+.auth-container{
     display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 850px;
     justify-content: space-between;
-    width: 950px;
-    margin: 30px auto;
+    margin: 50px auto;
+
+    .signup-done.authentication-container{
+        margin: 0 auto;
+    }
+
+    
+    .auth-buttons{
+        text-align: center;
+    }
+
+    span{
+        cursor: pointer;
+        font-weight: bold;
+        transition: transform 500ms ease-in-out;
+
+        &:hover{
+            display: inline-block;
+            transform: scale(1.1);
+        }
+    }
 }

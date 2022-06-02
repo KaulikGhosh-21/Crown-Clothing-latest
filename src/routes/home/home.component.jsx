@@ -1,4 +1,6 @@
 import Directory from "../../components/directory/directory.component";
+import { SuccessPrompt } from "../../components/success-prompt/success-prompt.component";
+
 
 // import { Outlet } from "react-router-dom";
 
@@ -39,7 +41,7 @@ const categories = [
 const Home = () => {
   return (
     <>
-        <Directory categories = {categories} />
+      <Directory categories = {categories} />
         {/* <Outlet /> */}
     </>
   );

@@ -19,10 +19,13 @@ export const emailSignInStart = (email, password) => ({
     payload: {email, password}
 })
 
-export const signInSuccess = (user) => ({
+export const signInSuccess = (user) => {
+    console.log("Signin success was called");
+    return{
     type: USER_ACTION_TYPES.SIGN_IN_SUCCESS,
     payload: user
-})
+}
+}
 
 export const signInFailed = (error) => ({
     type: USER_ACTION_TYPES.SIGN_IN_FAILED,
@@ -55,4 +58,57 @@ export const signOutSuccess = () => ({
 export const signOutFailed = (error) => ({
     type: USER_ACTION_TYPES.SIGN_OUT_FAILED,
     payload: error
+})
+
+export const addItemsToCartStart = (data) => ({
+    type: USER_ACTION_TYPES.ADD_ITEMS_TO_CART_START,
+    payload: data
+})
+
+export const addItemsToCartSuccess = (itemsInCart) => ({
+    type: USER_ACTION_TYPES.ADD_ITEMS_TO_CART_SUCCESS,
+    payload: itemsInCart
+})
+
+export const addItemsToCartFailed = (error) => ({
+    type: USER_ACTION_TYPES.ADD_ITEMS_TO_CART_FAILED,
+    payload: error
+})
+
+export const decrementItemQuantityFromCartStart = (data) => ({
+    type: USER_ACTION_TYPES.DECREMENT_ITEM_QUANTITY_FROM_CART_START,
+    payload: data
+})
+
+export const decrementItemQuantityFromCartSuccess = (itemsInCart) => ({
+    type: USER_ACTION_TYPES.DECREMENT_ITEM_QUANTITY_FROM_CART_SUCCESS,
+    payload: itemsInCart
+})
+
+export const decrementItemQuantityFromCartFailed = (error) => ({
+    type: USER_ACTION_TYPES.DECREMENT_ITEM_QUANTITY_FROM_CART_FAILED,
+    payload: error
+})
+
+export const removeItemFromCartStart = (data) => ({
+    type: USER_ACTION_TYPES.REMOVE_ITEM_FROM_CART_START,
+    payload: data
+})
+
+export const removeItemFromCartSuccess = (itemsInCart) => ({
+    type: USER_ACTION_TYPES.REMOVE_ITEM_FROM_CART_SUCCESS,
+    payload: itemsInCart
+})
+
+export const removeItemFromCartFailed = (error) => ({
+    type: USER_ACTION_TYPES.REMOVE_ITEM_FROM_CART_FAILED,
+    payload: error
+})
+
+export const itemSuccessfullyAdded = () => ({
+    type: USER_ACTION_TYPES.ITEM_SUCCESSFULLY_ADDED
+})
+
+export const authSuccessfullyDone = () => ({
+    type: USER_ACTION_TYPES.AUTH_SUCCESSFULLY_DONE
 })

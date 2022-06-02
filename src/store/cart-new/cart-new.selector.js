@@ -18,9 +18,9 @@ export const selectIsCartOpen = createSelector(
     }
 )
 
-export const selectNewCartCount = createSelector(
-    [selectCartReducerSlice],
-    (cartSlice) => {
-        return cartSlice.newCartCount;
-    }
-)
+// export const selectNewCartCount = createSelector(
+//     [selectCartReducerSlice],
+//     (cartSlice) => {
+//         return cartSlice.newCartCount;
+//     }
+// )

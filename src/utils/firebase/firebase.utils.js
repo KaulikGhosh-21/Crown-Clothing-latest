@@ -1,5 +1,7 @@
 import {initializeApp} from "firebase/app";
 
+// import { firestore } from "./firebase";
+
 import{
     getAuth,
     signInWithRedirect,
@@ -12,6 +14,7 @@ import{
 } from "firebase/auth";
 
 import {
+    updateDoc,
     getFirestore,
     doc,
     getDoc,
@@ -119,34 +122,43 @@ export const getCategoriesAndDocuments = async () => {
     // console.log(data);
 }
 
-
+export const updateUserDoc = async (currentUser, data) => {
+    const docRef = doc(db, 'users', currentUser.id);
+    await updateDoc(docRef, data);
+    const docSnapshot = await getDoc(docRef); 
+    console.log(docSnapshot.data());
+}
 
 export const createUserDocumentFromAuth = async (userAuth) => {
-    // console.log(userAuth)
+    console.log(userAuth)
     const userDocRef = doc(db, 'users', userAuth.uid);
 
-    // console.log(userDocRef);
+    console.log(userDocRef);
 
     const userDocSnapshot = await getDoc(userDocRef);
 
-    // console.log(userDocSnapshot.exists());
+    console.log(userDocSnapshot.exists());
 
     if(!userDocSnapshot.exists()){
         const {displayName, email} = userAuth;
         const createdAt = new Date();
+        const itemsInCart = [];
 
         try{
             await setDoc(userDocRef, {
                 displayName,
                 email,
-                createdAt
+                createdAt,
+                itemsInCart
             })
         }catch(err){
             console.log("Error created", err.message);
         }
     }
 
-    return userDocSnapshot;
+    const dataBack = await getDoc(userDocRef);
+
+    return dataBack;
 }
 
 

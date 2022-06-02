@@ -1,4 +1,4 @@
-export const CART_ACTION_TYPES = {
+export const CART_NEW_ACTION_TYPES = {
     SET_CART_ITEMS: 'SET_CART_ITEMS',
     SET_IS_CART_OPEN: 'SET_IS_CART_OPEN'
 };

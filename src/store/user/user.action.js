@@ -109,6 +109,10 @@ export const itemSuccessfullyAdded = () => ({
     type: USER_ACTION_TYPES.ITEM_SUCCESSFULLY_ADDED
 })
 
+export const itemSuccessfullyRemoved = () => ({
+    type: USER_ACTION_TYPES.ITEM_SUCCESSFULLY_REMOVED
+})
+
 export const authSuccessfullyDone = () => ({
     type: USER_ACTION_TYPES.AUTH_SUCCESSFULLY_DONE
 })

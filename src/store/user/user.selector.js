@@ -7,38 +7,65 @@ const selectUserReducerSlice = (state) => {
 export const selectCurrentUser = createSelector(
     [selectUserReducerSlice],
     (userSlice) => {
+        console.log("Hello");
         return userSlice.currentUser;
     }
 )
 
 export const selectUserIsLoading = createSelector(
     [selectUserReducerSlice],
-    (userSlice) => userSlice.isLoading
+    (userSlice) => {
+        console.log("Hello");
+        return userSlice.isLoading
+    }
 )
 
 export const selectIsSignupDone = createSelector(
     [selectUserReducerSlice],
-    (userSlice) => userSlice.isSignupDone
+    (userSlice) => {
+        console.log("Hello");
+        return userSlice.isSignupDone;
+    }
 )
 
 export const selectIsSignoutSuccessfull = createSelector(
     [selectUserReducerSlice],
-    (userSlice) => userSlice.isSignoutSuccessfull
+    (userSlice) => {
+        console.log("Hello");
+        return userSlice.isSignoutSuccessfull;
+    }
 )
 
 export const selectItemsInCart = createSelector(
     [selectUserReducerSlice],
-    (userSlice) => userSlice.itemsInCart
+    (userSlice) => {
+        console.log("Hello");
+        return userSlice.itemsInCart;
+    }
 )
 
 export const selectItemAddedToCart = createSelector(
     [selectUserReducerSlice],
-    (userSlice) => userSlice.itemAddedToCart
+    (userSlice) => {
+        console.log("Hello");
+        return userSlice.itemAddedToCart;
+    }
+)
+
+export const selectItemRemovedFromCart = createSelector(
+    [selectUserReducerSlice],
+    (userSlice) => {
+        console.log("Removed from cart selector", userSlice.itemRemovedFromCart)
+        return userSlice.itemRemovedFromCart
+    }
 )
 
 export const selectAuthDone = createSelector(
     [selectUserReducerSlice],
-    (userSlice) => userSlice.authDone
+    (userSlice) => {
+        console.log("Hello");
+        return userSlice.authDone;
+    }
 )
 
 // export const selectCurrentUser = (state) => {

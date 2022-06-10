@@ -11,16 +11,16 @@ import {
     addItemsToCartStart, 
     decrementItemQuantityFromCartStart, 
     removeItemFromCartStart ,
-    itemSuccessfullyAdded
+    itemSuccessfullyRemoved
 } from "../../store/user/user.action";
 
 import { selectCartItems } from "../../store/cart-new/cart-new.selector";
-import { selectCurrentUser, selectItemAddedToCart, selectItemsInCart } from "../../store/user/user.selector";
+import { selectCurrentUser, selectItemRemovedFromCart, selectItemsInCart } from "../../store/user/user.selector";
 
 import "./checkout-item.styles.scss";
 import { SuccessPrompt } from "../success-prompt/success-prompt.component";
 
-const CheckoutItem = ({checkoutItem}) => {
+const CheckoutItem = ({cartItems}) => {
 
     const currentUser = useSelector(selectCurrentUser); 
 
@@ -28,18 +28,22 @@ const CheckoutItem = ({checkoutItem}) => {
 
     const cartItemsOfUser = useSelector(selectItemsInCart)
 
-    const {name, quantity, price, imageUrl} = checkoutItem;
+    const isItemRemovedSuccessfully = useSelector(selectItemRemovedFromCart);
 
-    const isItemRemovedSuccessfully = useSelector(selectItemAddedToCart);
+    // const itemsInCart = useSelector(selectItemsInCart)
+
+    console.log(cartItemsOfUser);
+
+    console.log(isItemRemovedSuccessfully);
 
     if(isItemRemovedSuccessfully){
         const timeoutRet = setTimeout(() => {
-            dispatch(itemSuccessfullyAdded());
+            dispatch(itemSuccessfullyRemoved());
             clearTimeout(timeoutRet);
         }, 1000)
     }
 
-    const updateCartItemsInCheckout = (operation) => {
+    const updateCartItemsInCheckout = (operation, checkoutItem) => {
         switch(operation){
             case 'addToCart':
                 dispatch(addItemsToCartStart(
@@ -47,7 +51,11 @@ const CheckoutItem = ({checkoutItem}) => {
                 ));
                 return;
             case 'decrementFromCart':
-                dispatch(
+                checkoutItem.quantity === 1 ? dispatch(
+                    removeItemFromCartStart(
+                        {currentUser, cartItemsOfUser, product: checkoutItem}
+                    )
+                ) : dispatch(
                     decrementItemQuantityFromCartStart(
                         {currentUser, cartItemsOfUser, product: checkoutItem}
                     )
@@ -61,36 +69,59 @@ const CheckoutItem = ({checkoutItem}) => {
     }
 
     return(
-        <div className="checkout-item-container">
-            <div className="image-container">
-                <img src={imageUrl} />
-            </div>
-            <span className="name">{name}</span>
-            <span className="quantity">
-                <div 
-                    className="arrow"
-                    onClick={() => updateCartItemsInCheckout('decrementFromCart')}
-                >
-                    &#10094;
-                </div>
-                <div className="value">{quantity}</div>
-                <div 
-                    className="arrow"
-                    onClick={() => updateCartItemsInCheckout('addToCart')}
-                >
-                    &#10095;
-                </div>
-            </span>
-            <span className="price">{price}</span>
-            <div 
-                className="remove-button" 
-                onClick={updateCartItemsInCheckout}>&#10005;</div>
+        <>
+        {
+            isItemRemovedSuccessfully && 
+                <SuccessPrompt>
+                    Item successfully removed from cart
+                </SuccessPrompt>
+        }
+        {
+            cartItems.length > 0 ? cartItems.map(checkoutItem => {
 
-            {
-                isItemRemovedSuccessfully && 
-                <SuccessPrompt>Item successfully removed from cart</SuccessPrompt>
-            }
-        </div>
+                const { imageUrl, name, price, quantity, id } = checkoutItem;
+
+                return (
+                    <div className="checkout-item-container" key={id}>
+                        <div className="image-container">
+                            <img src={imageUrl} />
+                        </div>
+                        <span className="name">{name}</span>
+                        <span className="quantity">
+                            <div 
+                                className="arrow"
+                                onClick={
+                                    () => 
+                                    updateCartItemsInCheckout('decrementFromCart', checkoutItem)}
+                            >
+                                &#10094;
+                            </div>
+                            <div className="value">{quantity}</div>
+                            <div 
+                                className="arrow"
+                                onClick={
+                                    () => 
+                                    updateCartItemsInCheckout('addToCart', checkoutItem)}
+                            >
+                                &#10095;
+                            </div>
+                        </span>
+                        <span className="price">{price}</span>
+                        <div 
+                            className="remove-button" 
+                            onClick={
+                                () => updateCartItemsInCheckout("", checkoutItem)
+                                }
+                        >
+                            &#10005;
+                        </div>
+
+                </div>
+                )})
+                : <h2>No products in your cart.</h2>
+        }
+        </>
+        
     )
 };
 

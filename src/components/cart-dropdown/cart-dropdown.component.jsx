@@ -1,12 +1,11 @@
+import { useCallback } from "react";
+
 import "./cart-dropdown.styles.jsx";
 
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { 
-    selectIsCartOpen, 
-    selectCartItems 
-} from "../../store/cart-new/cart-new.selector.js";
+import { selectIsCartOpen } from "../../store/cart-new/cart-new.selector.js";
 
 import { setIsCartOpen } from "../../store/cart-new/cart-new.action.js";
 
@@ -28,7 +27,6 @@ const CartDropdown = () => {
 
     const dispatch = useDispatch();
 
-
     const isCartOpen = useSelector(selectIsCartOpen);
 
     const toggleCart = () => {
@@ -37,6 +35,11 @@ const CartDropdown = () => {
         );
     }
 
+    const handleGoToCheckout = useCallback(() => {
+        navigate('/checkout')
+    }, [])
+    
+
     return(
         <HideOverlayContainer showOverlay={isCartOpen}
             onClick={toggleCart}
@@ -44,7 +47,7 @@ const CartDropdown = () => {
             <CartDropdownContainer showDropdown={isCartOpen}>
                 <CartItems>
                     {
-                        itemsInCart ? 
+                        itemsInCart.length > 0 ? 
                         (itemsInCart.map(cartItem => 
                             <CartItem key={cartItem.id} cartItem={cartItem} />)
                         ) : 
@@ -56,7 +59,7 @@ const CartDropdown = () => {
                     }
                 </CartItems>
 
-                <Button onClick={() => navigate('/checkout')}>Go to checkout</Button>
+                <Button onClick={handleGoToCheckout}>Go to checkout</Button>
             </CartDropdownContainer>
         </HideOverlayContainer>
     )

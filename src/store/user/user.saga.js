@@ -159,12 +159,17 @@ export function* onAddItemsToCartStart(){
     yield takeLatest(USER_ACTION_TYPES.ADD_ITEMS_TO_CART_START, addItemsToCartOfUser)
 }
 
+
+
+
 export function* decrementItemQuantity({
         payload: { currentUser, cartItemsOfUser, product } 
     }){
         try{
             const userUpdatedCartItems = decrementItemsQuantity(cartItemsOfUser, product);
             yield call(updateUserDoc, currentUser, {itemsInCart: userUpdatedCartItems})
+            product.quantity === 1 ? 
+            yield put(removeItemFromCartSuccess(userUpdatedCartItems)) : 
             yield put(decrementItemQuantityFromCartSuccess(userUpdatedCartItems));
         } catch(err){
             yield put(decrementItemQuantityFromCartFailed(err))

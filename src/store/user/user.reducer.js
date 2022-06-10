@@ -7,8 +7,10 @@ const INITIAL_STATE = {
     error: null,
     itemsInCart: [],
     itemAddedToCart: false,
+    itemRemovedFromCart: false,
     authDone: false
 }
+
 
 export const userReducer = (state = INITIAL_STATE, action) => {
     switch(action.type){
@@ -17,22 +19,32 @@ export const userReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 itemAddedToCart: false
             }
-            case USER_ACTION_TYPES.AUTH_SUCCESSFULLY_DONE:
-                return{
-                    ...state,
-                    authDone: false
-                }
+        case USER_ACTION_TYPES.ITEM_SUCCESSFULLY_REMOVED:
+            return{
+                ...state,
+                itemRemovedFromCart: false
+            }
+        case USER_ACTION_TYPES.AUTH_SUCCESSFULLY_DONE:
+            return{
+                ...state,
+                authDone: false
+            }
         case USER_ACTION_TYPES.DECREMENT_ITEM_QUANTITY_FROM_CART_SUCCESS:
             return{
                 ...state,
                 itemsInCart: action.payload, 
             }
         case USER_ACTION_TYPES.ADD_ITEMS_TO_CART_SUCCESS:
-        case USER_ACTION_TYPES.REMOVE_ITEM_FROM_CART_SUCCESS:
             return{
                 ...state,
                 itemsInCart: action.payload,
                 itemAddedToCart: true
+            }
+        case USER_ACTION_TYPES.REMOVE_ITEM_FROM_CART_SUCCESS:
+            return{
+                ...state,
+                itemsInCart: action.payload,
+                itemRemovedFromCart: true
             }
         case USER_ACTION_TYPES.SIGN_UP_START:
         case USER_ACTION_TYPES.EMAIL_SIGN_IN_START:
